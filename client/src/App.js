@@ -4,13 +4,18 @@ import { useEffect, useState } from 'react';
 import Items from './Components/Items';
 import Form from './Components/Form';
 import Navbar from './Components/Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { setItems } from './API/todoSlice';
 
 function App() {
+  const stuff= useSelector((state)=>state.todos.value)
+  console.log('REDUX STUFF',stuff)
   const [data,setData]=useState(['1','2','3'])
+  const dispatch=useDispatch()
 
   useEffect(()=>{
     const fetchData=async()=>{
-      const response= await fetch('/api/todos/')
+      const response= await fetch('http://localhost:5000/api/todos/')
       const items= await response.json()
       
       if(!response.ok){
@@ -18,7 +23,7 @@ function App() {
       }
       else{
         console.log('items  are',items)
-        setData(items)
+        dispatch(setItems(items))
       }
 
     }
@@ -29,7 +34,7 @@ function App() {
       <div className='bg-teal-400 h-[700px]'>
       <Navbar/>
        <Form/>
-       {data.map((item)=>(
+       {stuff.map((item)=>(
         <Items item={item}/>
        ))}
 

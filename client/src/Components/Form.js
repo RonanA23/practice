@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addItem } from '../API/todoSlice'
 
 function Form() {
+  const dispatch=useDispatch()
   const[newtodo,setNewtodo]=useState('')
   const[error,setError]=useState('')
   const submitHandler=async()=>{
-    const response=await fetch('/api/todos/',{
+    const response=await fetch('http://localhost:5000/api/todos/',{
       method:'POST',
-      body:JSON.stringify(newtodo),
+      body:JSON.stringify({title:newtodo}),
       headers:{'Content-Type':'application/json'}
     })
     console.log('response is',response)
@@ -19,6 +22,7 @@ function Form() {
     if(response.ok){
       setError(null)
     }
+    dispatch(addItem({title:newtodo}))
     console.log('New tod o is',json)
     }
   return (
